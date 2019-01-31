@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name">EzMoviesAdmin</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password" lang="en">Password</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="button_movies">Movies</string>
+    <string name="button_categories">Categories</string>
+    <string name="button_actors">Actors</string>
+    <string name="button_modificar">Modify</string>
+
+
+    <string name="txt_nombre_pelicula">Movie Name</string>
+    <string name="txt_nombre_categoria">Categorie</string>
+    <string name="txt_nombre_actor">Actor</string>
+
+    <string name="btn_modificar">Modify</string>
+    <string name="btn_modCre">Modify/Create</string>
+    <string name="btn_borrar">Delete</string>
+    <string name="btn_crear">Create</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_navegacion">NavegacionActivity</string>
+    <string name="title_home">Movies</string>
+    <string name="title_dashboard">Categories</string>
+    <string name="title_notifications">Actors</string>
+    <string name="comments_notifications">Comments</string>
+    <string name="title_activity_nav">NavActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_navegation">Navegation</string>
+</resources>

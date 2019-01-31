@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">EzMoviesAdmin</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Correo Electrónico</string>
+    <string name="prompt_password">Contraseña</string>
+    <string name="action_sign_in">Ingresar</string>
+    <string name="action_sign_in_short">Ingresar</string>
+    <string name="error_invalid_email">La direcion del correo es invalida</string>
+    <string name="error_invalid_password">La clave es muy corta</string>
+    <string name="error_incorrect_password">La clave esta incorrecta</string>
+    <string name="error_field_required">Este campo es obligatorio</string>
+
+    <!-- Nav -->
+    <string name="button_movies">Peliculas</string>
+    <string name="button_categories">Categorias</string>
+    <string name="button_actors">Actores</string>
+    <string name="button_modificar">Modificar</string>
+
+    <string name="txt_nombre_pelicula">Nombre de la Pelicula</string>
+    <string name="txt_nombre_categoria">Categoria</string>
+    <string name="txt_nombre_actor">Actor</string>
+    <string name="btn_modCre">Modificar/Crear</string>
+
+    <string name="btn_modificar">Modificar</string>
+    <string name="btn_borrar">Borrar</string>
+    <string name="btn_crear">Crear</string>
+
+    <string name="title_home">Peliculas</string>
+    <string name="title_dashboard">Categorias</string>
+    <string name="title_notifications">Actores</string>
+    <string name="title_activity_navegation">Navegacion</string>
+    <string name="comments_notifications">Comentarios</string>
+
+</resources>
