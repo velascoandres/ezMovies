@@ -25,7 +25,7 @@ SECRET_KEY = '$_@d2q)r&4p(wxmmwxb3!j6#^)c$6iqy7tw4r_kftlxqrtiu6x'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['172.29.50.237','172.29.66.76']
+ALLOWED_HOSTS = ['172.29.50.237', '172.29.66.76', '172.29.66.128','127.0.0.1','192.168.1.51']
 
 
 # Application definition
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'apps.comentarios',
+    'apps.peliculas',
     'rest_framework',
 ]
 
