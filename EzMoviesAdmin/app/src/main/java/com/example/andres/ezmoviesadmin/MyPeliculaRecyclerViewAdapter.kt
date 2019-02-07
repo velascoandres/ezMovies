@@ -9,11 +9,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 
 
 import com.example.andres.ezmoviesadmin.PeliculaFragment.OnListFragmentInteractionListener
 import com.example.andres.ezmoviesadmin.dummy.PeliculaContent.Pelicula
+import com.squareup.picasso.Picasso
 
 import kotlinx.android.synthetic.main.fragment_pelicula.view.*
 
@@ -48,11 +50,24 @@ class MyPeliculaRecyclerViewAdapter(
         val item = mValues[position]
         //holder.mIdView.text = item.id
         holder.mContentView.text = item.nombre
-        holder.mCategoryView.text = item.categoria_nombre
+        holder.mCategoryView.text = item.generos.toString()
+        holder.mDescripcion.text = item.descripcion
         holder.mBotonView.setOnClickListener {
-            val pelicula_s = Pelicula_S(item.id,item.nombre,item.categoria_id,item.categoria_nombre)
+            val pelicula_s = Pelicula_S(
+                    id=item.id,
+                    nombre =item.nombre,
+                    descripcion = item.descripcion,
+                    caratula = item.caratula,
+                    costo = item.costo,
+                    generos = item.generos
+                    )
             irActividadModificar(pelicula_s)
         }
+        Picasso.get()
+                .load(item.caratula)
+                .resize(256,256)
+                .centerCrop()
+                .into(holder.mCaratula)
 
 
 
@@ -77,8 +92,10 @@ class MyPeliculaRecyclerViewAdapter(
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
         //val mIdView: TextView = mView.item_number
+        val mCaratula: ImageView = mView.imageView
         val mContentView: TextView = mView.contenido
         val mCategoryView:TextView = mView.categoria
+        val mDescripcion:TextView = mView.descripcion
         val mBotonView:Button = mView.boton_modificar
 
 

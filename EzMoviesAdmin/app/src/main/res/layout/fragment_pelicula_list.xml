@@ -10,5 +10,4 @@
     android:layout_marginRight="16dp"
     android:clickable="true"
     app:layoutManager="LinearLayoutManager"
-    tools:context=".PeliculaFragment"
-    tools:listitem="@layout/fragment_pelicula" />
+    tools:context=".PeliculaFragment" />

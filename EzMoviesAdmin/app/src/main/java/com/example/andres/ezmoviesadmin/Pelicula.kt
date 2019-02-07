@@ -3,27 +3,36 @@ package com.example.andres.ezmoviesadmin
 import android.os.Parcel
 import android.os.Parcelable
 
-class Pelicula_S(val id: String, val nombre: String, val id_categoria: String,val nombre_categoria: String):Parcelable {
+
+class Pelicula_S(
+        val id: Int?,
+        val nombre: String,
+        val caratula: String,
+        val descripcion: String,
+        val generos:ArrayList<Int>?,
+        val costo:String
+        ):Parcelable {
     constructor(parcel: Parcel) : this(
+            parcel.readValue(Int::class.java.classLoader) as? Int,
             parcel.readString(),
             parcel.readString(),
             parcel.readString(),
-            parcel.readString()) {
+            parcel.readSerializable() as ArrayList<Int>?,
+            parcel.readString()
+    ) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(id)
+        parcel.writeValue(id)
         parcel.writeString(nombre)
-        parcel.writeString(id_categoria)
-        parcel.writeString(nombre_categoria)
+        parcel.writeString(caratula)
+        parcel.writeString(descripcion)
+        parcel.writeSerializable(generos)
+        parcel.writeString(costo)
     }
 
     override fun describeContents(): Int {
         return 0
-    }
-
-    override fun toString(): String {
-        return this.nombre
     }
 
     companion object CREATOR : Parcelable.Creator<Pelicula_S> {

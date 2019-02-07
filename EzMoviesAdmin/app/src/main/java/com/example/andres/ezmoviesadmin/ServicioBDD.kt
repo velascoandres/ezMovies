@@ -4,6 +4,7 @@ import com.example.andres.ezmoviesadmin.dummy.PeliculaContent
 
 class BDD{
     companion object {
+        val ip = "172.29.23.198:80"
         val peliculas = ArrayList<PeliculaContent.Pelicula>()
         val categorias = ArrayList<Categoria>()
         val actores = ArrayList<Actor>()

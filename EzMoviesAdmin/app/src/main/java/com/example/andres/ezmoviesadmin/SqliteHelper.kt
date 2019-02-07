@@ -123,7 +123,7 @@ class SqliteHelper(context: Context?) :
 
         dbReadable.close()
     }
-
+    /*
     fun getPeliculas(peliculas: ArrayList<PeliculaContent.Pelicula>){
         val statement = "select id_pelicula, pelicula.nombre, pelicula.id_categoria, categoria.nombre from pelicula,categoria where pelicula.id_categoria=categoria.id_categoria;"
 
@@ -145,7 +145,7 @@ class SqliteHelper(context: Context?) :
         dbReadable.close()
 
 
-    }
+    }*/
 
     fun crearPeliculaFormulario(nombre: String,
                                 id_categoria: String): Boolean {
