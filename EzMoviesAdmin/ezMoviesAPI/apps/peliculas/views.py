@@ -19,3 +19,48 @@ class GeneroGetPost(generics.ListCreateAPIView):
 class ActorGetPost(generics.ListCreateAPIView):
     queryset = Actor.objects.all()
     serializer_class = ActorSerializado
+
+#  Actualizar
+class PeliculaUpdate(generics.UpdateAPIView):
+    queryset = Pelicula.objects.all()
+    lookup_field = 'id'
+    serializer_class = PeliculaSerializada
+
+#  Actualizar
+class GeneroUpdate(generics.UpdateAPIView):
+    queryset = Genero.objects.all()
+    lookup_field = 'id'
+    serializer_class = GeneroSerializado
+
+
+#  Actualizar
+class ActorUpdate(generics.UpdateAPIView):
+    queryset = Actor.objects.all()
+    lookup_field = 'id'
+    serializer_class = ActorSerializado
+
+# Borrar
+class PeliculaDelete(generics.DestroyAPIView):
+    queryset = Pelicula.objects.all()
+    lookup_field = 'id'
+    serializer_class = PeliculaSerializada
+    http_method_names = ["delete"]
+    allowed_methods = ('DELETE',)
+
+# Borrar
+class GeneroDelete(generics.DestroyAPIView):
+    queryset = Genero.objects.all()
+    lookup_field = 'id'
+    serializer_class = GeneroSerializado
+    http_method_names = ["delete"]
+    allowed_methods = ('DELETE',)
+
+# Borrar
+class ActorDelete(generics.DestroyAPIView):
+    queryset = Actor.objects.all()
+    lookup_field = 'id'
+    serializer_class = ActorSerializado
+    http_method_names = ["delete"]
+    allowed_methods = ('DELETE',)
+
+
