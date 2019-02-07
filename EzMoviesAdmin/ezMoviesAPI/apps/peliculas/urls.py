@@ -7,9 +7,9 @@ urlpatterns = [
     path('api/generos', GeneroGetPost.as_view(), name="api_generos"),
     path('api/pelicula/<int:id>/update', PeliculaUpdate.as_view(), name="pelicula_put"),
     path('api/actor/<int:id>/update', ActorUpdate.as_view(), name="actor_put"),
-    path('api/genero/<int:id>/update', GeneroSerializado.as_view(), name="genero_put"),
+    path('api/generos/<int:id>/update', GeneroUpdate.as_view(), name="genero_put"),
     path('api/pelicula/<int:id>/delete', PeliculaDelete.as_view(), name="pelicula_delete"),
-    path('api/actor/<int:id>/delete', ActorSerializado.as_view(), name="actor_delete"),
-    path('api/genero/<int:id>/delete', GeneroSerializado.as_view(), name="genero_delete"),
+    path('api/actor/<int:id>/delete', ActorDelete.as_view(), name="actor_delete"),
+    path('api/generos/<int:id>/delete', GeneroDelete.as_view(), name="genero_delete"),
 
 ]
