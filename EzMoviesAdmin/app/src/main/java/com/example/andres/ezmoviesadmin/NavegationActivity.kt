@@ -56,6 +56,7 @@ class NavegationActivity : AppCompatActivity() {
         setContentView(R.layout.activity_navegation)
         fragmentoActual = PeliculaFragment()
         getPeliculas(BDD.peliculas)
+        getCategorias(BDD.categorias)
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
     }

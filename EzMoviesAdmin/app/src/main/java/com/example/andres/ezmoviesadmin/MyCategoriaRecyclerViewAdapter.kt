@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.fragment_categoria.view.*
  * TODO: Replace the implementation with code for your data type.
  */
 class MyCategoriaRecyclerViewAdapter(
-        private val mValues: List<Categoria>,
+        private val mValues: List<CategoriaAPI>,
         private val mListener: OnListFragmentInteractionListener?,private val context: Context)
     : RecyclerView.Adapter<MyCategoriaRecyclerViewAdapter.ViewHolder>() {
 
@@ -44,10 +44,10 @@ class MyCategoriaRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
-        holder.mIdView.text = item.id
-        holder.mContentView.text = item.nombre_categoria
+        holder.mIdView.text = item.id.toString()
+        holder.mContentView.text = item.nombre
         holder.mBotonMod.setOnClickListener {
-            val categoria = Categoria(item.id,item.nombre_categoria)
+            val categoria = Categoria(item.id.toString(),item.nombre)
             irActividadModificar(categoria)
         }
 

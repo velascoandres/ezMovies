@@ -10,6 +10,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import android.widget.LinearLayout
+import com.example.andres.ezmoviesadmin.BDD.Companion.categorias
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_modificar_pelicula.*
 import java.lang.reflect.Array
@@ -21,7 +22,6 @@ class ModificarPeliculaActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_modificar_pelicula)
         val helper = SqliteHelper(this)
-        helper.getCategorias(BDD.categorias)
         var id_categoria:String = "1"
 
         val pelicula = intent.getParcelableExtra<Pelicula_S?>("pelicula")
@@ -37,15 +37,15 @@ class ModificarPeliculaActivity : AppCompatActivity() {
                 .into(caratula_img)
 
         var lista = ArrayList<Int>()
-        for (i in 0 until 5) {
+        for (genero in categorias) {
 
             val checkBox = CheckBox(this)
-            checkBox.text = "titulo"
+            checkBox.text = "${genero.nombre}"
             checkBox.setOnCheckedChangeListener { buttonView, isChecked ->
                 if(isChecked){
-                    lista.add(i)
+                    lista.add(genero.id.toInt())
                 }else{
-                    lista.remove(i)
+                    lista.remove(genero.id.toInt())
                 }
                 Log.i("check",lista.toString())
             }
@@ -54,12 +54,6 @@ class ModificarPeliculaActivity : AppCompatActivity() {
             GenerosLayout.addView(checkBox)
         }
         var arregloCategorias = BDD.categorias
-        val adaptadorCategorias=ArrayAdapter<Categoria>(
-                this,
-                android.R.layout.simple_spinner_dropdown_item,
-                arregloCategorias
-
-        )
 
         btn_update.setOnClickListener {
 

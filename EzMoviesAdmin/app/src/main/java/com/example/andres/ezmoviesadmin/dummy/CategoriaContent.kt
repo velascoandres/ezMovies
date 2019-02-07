@@ -2,6 +2,7 @@ package com.example.andres.ezmoviesadmin.dummy
 
 import com.example.andres.ezmoviesadmin.BDD.Companion.categorias
 import com.example.andres.ezmoviesadmin.Categoria
+import com.example.andres.ezmoviesadmin.CategoriaAPI
 import java.util.ArrayList
 import java.util.HashMap
 
@@ -16,12 +17,12 @@ object CategoriaContent {
     /**
      * An array of sample (dummy) items.
      */
-    val ITEMS: MutableList<Categoria>
+    val ITEMS: MutableList<CategoriaAPI>
 
     /**
      * A map of sample (dummy) items, by ID.
      */
-    val ITEM_MAP: MutableMap<String,Categoria> = HashMap()
+    val ITEM_MAP: MutableMap<String,CategoriaAPI> = HashMap()
 
     private val COUNT = 25
 
