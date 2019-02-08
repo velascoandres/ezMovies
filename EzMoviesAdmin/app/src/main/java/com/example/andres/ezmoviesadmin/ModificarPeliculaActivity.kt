@@ -11,12 +11,15 @@ import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import android.widget.LinearLayout
 import com.example.andres.ezmoviesadmin.BDD.Companion.categorias
+import com.example.andres.ezmoviesadmin.dummy.PeliculaContent
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_modificar_pelicula.*
 import java.lang.reflect.Array
 
 class ModificarPeliculaActivity : AppCompatActivity() {
-
+    var id = 0
+    var lista = ArrayList<Int>()
+    var caratula = ""
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +32,8 @@ class ModificarPeliculaActivity : AppCompatActivity() {
         txt_nombre.setText(pelicula?.nombre)
         txt_desc.setText(pelicula?.descripcion)
         txt_costo.setText(pelicula?.costo)
+        txt_id_pelicula.setText(pelicula?.id.toString())
+        var caratula = pelicula?.caratula
 
         Picasso.get()
                 .load(pelicula?.caratula)
@@ -36,7 +41,6 @@ class ModificarPeliculaActivity : AppCompatActivity() {
                 .centerCrop()
                 .into(caratula_img)
 
-        var lista = ArrayList<Int>()
         for (genero in categorias) {
 
             val checkBox = CheckBox(this)
@@ -56,7 +60,7 @@ class ModificarPeliculaActivity : AppCompatActivity() {
         var arregloCategorias = BDD.categorias
 
         btn_update.setOnClickListener {
-
+            actualizar()
         }
 
         btn_borrar.setOnClickListener {
@@ -83,15 +87,17 @@ class ModificarPeliculaActivity : AppCompatActivity() {
 
     }
 
-    fun setSpinnerPosition(categoria: String,arreglo:ArrayList<Categoria>):Int{
-        var i=0;
-        for (item in arreglo){
-            if (categoria.equals(item.nombre_categoria)){
-                return i
-            }
-            i++
-        }
-        return i
+    fun actualizar(){
+        val id = id
+        val nombre = txt_nombre.text.toString()
+        val descripcion = txt_desc.text.toString()
+        val costo = txt_costo.text.toString()
+        val caratula = caratula
+        val pelicula = PeliculaContent.Pelicula(id=id,nombre = nombre,descripcion =  descripcion,costo = costo,caratula =  caratula, generos = lista)
+
+        val parametros = listOf("id" to pelicula.id , "nombre" to pelicula.nombre, "descripcion" to pelicula.descripcion,
+                "costo" to pelicula.costo, "caratula" to pelicula.caratula)
+        actualizarPelicula(parametros = parametros,id = id.toString(), funcion_intent = ::regresarNavegacion)
     }
 
     fun regresarNavegacion(){
