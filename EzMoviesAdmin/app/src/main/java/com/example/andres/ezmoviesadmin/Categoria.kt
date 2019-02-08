@@ -3,6 +3,10 @@ package com.example.andres.ezmoviesadmin
 import android.os.Parcel
 import android.os.Parcelable
 
+
+class CategoriaAPI(val id: Int, val nombre: String){}
+
+
 class Categoria(val id: String, val nombre_categoria: String):Parcelable{
     constructor(parcel: Parcel) : this(
             parcel.readString(),

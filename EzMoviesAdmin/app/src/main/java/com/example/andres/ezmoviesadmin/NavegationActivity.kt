@@ -13,6 +13,12 @@ import java.util.*
 import kotlin.concurrent.schedule
 import android.graphics.BitmapFactory
 import android.graphics.Bitmap
+import android.view.View
+import com.example.andres.ezmoviesadmin.BDD.Companion.actores
+import com.example.andres.ezmoviesadmin.BDD.Companion.ip
+import com.example.andres.ezmoviesadmin.BDD.Companion.peliculas
+import com.example.andres.ezmoviesadmin.dummy.PeliculaContent
+import kotlinx.android.synthetic.main.fragment_pelicula.*
 import java.net.URL
 
 
@@ -21,21 +27,27 @@ class NavegationActivity : AppCompatActivity() {
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_home -> {
-                crearFragmentoUno()
+                destruirFragmentoActual()
+                loadingPanel.visibility = View.VISIBLE
+                getPeliculas(BDD.peliculas)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_dashboard -> {
-                crearFragmentoDos()
+                destruirFragmentoActual()
+                loadingPanel.visibility = View.VISIBLE
+                getCategoriasF(BDD.categorias)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_notifications -> {
-                crearFragmentoTres()
+                destruirFragmentoActual()
+                loadingPanel.visibility = View.VISIBLE
+                getActores(BDD.actores)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.comments_notifications ->{
+                destruirFragmentoActual()
+                loadingPanel.visibility = View.VISIBLE
                 getComentarios(BDD.comentarios)
-                crearFragmentoCuatro()
-
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -47,8 +59,10 @@ class NavegationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_navegation)
         fragmentoActual = PeliculaFragment()
-        crearFragmentoUno()
+        getPeliculas(BDD.peliculas)
+        getCategorias(BDD.categorias)
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+
     }
 
     override fun onResume() {
@@ -146,7 +160,7 @@ class NavegationActivity : AppCompatActivity() {
 
     }
     fun getComentarios(comentarios: ArrayList<Comentario>){
-        val url = "http://172.29.50.237:80/comentario/api/"
+        val url = "http://${ip}/comentario/api/"
         url.httpGet().responseString{request, response, result ->
             when (result) {
                 is Result.Failure -> {
@@ -163,12 +177,85 @@ class NavegationActivity : AppCompatActivity() {
                         }
                     }
 
+                    crearFragmentoCuatro()
+                    loadingPanel.visibility = View.INVISIBLE
+
                 }
             }
+        }
+    }
 
+    fun getPeliculas(peliculas: ArrayList<PeliculaContent.Pelicula>){
+        val url = "http://${ip}/pelicula/api/pelicula"
+        url.httpGet().responseString{request, response, result ->
+            when (result) {
+                is Result.Failure -> {
+                    val ex = result.getException()
+                }
+                is Result.Success -> {
+                    val data = result.get()
+                    peliculas.clear()
+                    val wordDict = Klaxon().parseArray<PeliculaContent.Pelicula>(data)
+                    Log.i("http", "Datos: ${wordDict.toString()}")
+                    if (wordDict != null) {
+                        for ( pelicula in wordDict.iterator()){
+                            peliculas.add(pelicula)
+                        }
+                    }
 
+                    crearFragmentoUno()
+                    loadingPanel.visibility = View.INVISIBLE
+                }
+            }
+        }
+    }
+    fun getCategoriasF(categorias: ArrayList<CategoriaAPI>){
+        val url = "http://${ip}/pelicula/api/generos"
+        url.httpGet().responseString{request, response, result ->
+            when (result) {
+                is Result.Failure -> {
+                    val ex = result.getException()
+                }
+                is Result.Success -> {
+                    val data = result.get()
+                    categorias.clear()
+                    val wordDict = Klaxon().parseArray<CategoriaAPI>(data)
+                    Log.i("http", "Datos: ${wordDict.toString()}")
+                    if (wordDict != null) {
+                        for ( categoria in wordDict.iterator()){
+                            categorias.add(categoria)
+                        }
+                    }
 
+                    crearFragmentoDos()
+                    loadingPanel.visibility = View.INVISIBLE
+                }
+            }
+        }
+    }
 
+    fun getActores(actores: ArrayList<ActorAPI>){
+        val url = "http://${ip}/pelicula/api/actor"
+        url.httpGet().responseString{request, response, result ->
+            when (result) {
+                is Result.Failure -> {
+                    val ex = result.getException()
+                }
+                is Result.Success -> {
+                    val data = result.get()
+                    actores.clear()
+                    val wordDict = Klaxon().parseArray<ActorAPI>(data)
+                    Log.i("http", "Datos: ${wordDict.toString()}")
+                    if (wordDict != null) {
+                        for ( categoria in wordDict.iterator()){
+                            actores.add(categoria)
+                        }
+                    }
+
+                    crearFragmentoTres()
+                    loadingPanel.visibility = View.INVISIBLE
+                }
+            }
         }
     }
 }

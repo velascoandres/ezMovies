@@ -1,6 +1,7 @@
 package com.example.andres.ezmoviesadmin.dummy
 
 import com.example.andres.ezmoviesadmin.Actor
+import com.example.andres.ezmoviesadmin.ActorAPI
 import com.example.andres.ezmoviesadmin.BDD.Companion.actores
 import java.util.ArrayList
 import java.util.HashMap
@@ -14,8 +15,8 @@ import java.util.HashMap
 object ActorContent {
 
 
-    val ITEMS: MutableList<Actor>
-    val ITEM_MAP: MutableMap<String, Actor> = HashMap()
+    val ITEMS: MutableList<ActorAPI>
+    val ITEM_MAP: MutableMap<String, ActorAPI> = HashMap()
     private val COUNT = 25
     init {
         ITEMS = actores

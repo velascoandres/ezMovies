@@ -28,8 +28,6 @@ class ActorFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val helper = SqliteHelper(context)
-        helper.getActores(actores)
         Log.i("actor", actores.toString())
         arguments?.let {
             columnCount = it.getInt(ARG_COLUMN_COUNT)

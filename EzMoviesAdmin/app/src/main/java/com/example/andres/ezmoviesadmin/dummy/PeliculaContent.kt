@@ -1,5 +1,6 @@
 package com.example.andres.ezmoviesadmin.dummy
 
+import android.media.Image
 import com.example.andres.ezmoviesadmin.BDD.Companion.peliculas
 import java.util.HashMap
 
@@ -33,25 +34,13 @@ object PeliculaContent {
         }*/
     }
 
-    private fun addItem(item: Pelicula) {
-        ITEMS.add(item)
-        ITEM_MAP.put(item.id, item)
-    }
 
-
-    private fun makeDetails(position: Int): String {
-        val builder = StringBuilder()
-        builder.append("Details about Item: ").append(position)
-        for (i in 0..position - 1) {
-            builder.append("\nMore categoria_id information here.")
-        }
-        return builder.toString()
-    }
 
     /**
      * A dummy item representing a piece of nombre.
      */
-    data class Pelicula(val id: String, val nombre: String, val categoria_id: String,val categoria_nombre: String) {
+    data class Pelicula(val id: Int, val caratula:String,val nombre: String, val descripcion: String,
+                        val costo:String, val generos: ArrayList<Int>) {
         override fun toString(): String = nombre
     }
 }

@@ -23,6 +23,7 @@ from ezMoviesAPI import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('comentario/', include(('apps.comentarios.urls', 'apps.comentarios'), namespace="comentarios")),
+    path('pelicula/', include(('apps.peliculas.urls', 'apps.peliculas'), namespace="peliculas")),
     url(r'^api-auth/', include('rest_framework.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

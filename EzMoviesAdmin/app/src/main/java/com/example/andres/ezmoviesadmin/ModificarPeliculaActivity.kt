@@ -1,5 +1,6 @@
 package com.example.andres.ezmoviesadmin
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -7,95 +8,77 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.CheckBox
+import android.widget.LinearLayout
+import com.example.andres.ezmoviesadmin.BDD.Companion.categorias
+import com.example.andres.ezmoviesadmin.dummy.PeliculaContent
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_modificar_pelicula.*
 import java.lang.reflect.Array
+import com.example.andres.ezmoviesadmin.R.id.imageView
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.Bitmap
+import android.content.ContentValues
+import android.content.Context
+import android.content.ContextWrapper
+import android.net.Uri
+import android.provider.MediaStore
+import java.io.*
+import java.util.*
+
 
 class ModificarPeliculaActivity : AppCompatActivity() {
-
+    var id = 0
+    var lista = ArrayList<Int>()
+    var caratula = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_modificar_pelicula)
         val helper = SqliteHelper(this)
-        helper.getCategorias(BDD.categorias)
         var id_categoria:String = "1"
 
         val pelicula = intent.getParcelableExtra<Pelicula_S?>("pelicula")
 
         txt_nombre.setText(pelicula?.nombre)
+        txt_desc.setText(pelicula?.descripcion)
+        txt_costo.setText(pelicula?.costo)
+        txt_id_pelicula.text = pelicula?.id.toString()
+        caratula = pelicula?.caratula!!
 
+        Picasso.get()
+                .load(pelicula.caratula)
+                .resize(256,512)
+                .centerCrop()
+                .into(caratula_img)
 
-        var arregloCategorias = BDD.categorias
-        val adaptadorCategorias=ArrayAdapter<Categoria>(
-                this,
-                android.R.layout.simple_spinner_dropdown_item,
-                arregloCategorias
+        for (genero in categorias) {
 
-        )
-
-
-
-        spinner_categoria.adapter = adaptadorCategorias
-        if (pelicula != null) {
-            spinner_categoria.setSelection(setSpinnerPosition(pelicula.nombre_categoria,arregloCategorias))
-        }
-        spinner_categoria
-                .onItemSelectedListener=
-                object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(
-                            parent: AdapterView<*>?,
-                            view: View?,
-                            position: Int,
-                            id: Long) {
-                        val categoria = arregloCategorias[position]
-                        id_categoria = categoria.id
-                    }
-
-                    override fun onNothingSelected(
-                            parent: AdapterView<*>?) {
-                        Log.i("adaptador", "${parent}")
-                    }
-                }
-
-
-            btn_update.setOnClickListener {
-                if (pelicula != null) {
-                    if(helper.actualizarPelicula(pelicula.id,txt_nombre.text.toString(),id_categoria)){
-                        Log.i("UPDATE","Exito")
-                        regresarNavegacion()
-                    }else{
-                        Log.i("UPDATE","Fallo")
-                    }
-
-                }
-            }
-
-            btn_crear.setOnClickListener{
-                if(helper.crearPeliculaFormulario(txt_nombre.text.toString(),id_categoria)){
-                    Log.i("CREAR","Exito")
-                    regresarNavegacion()
+            val checkBox = CheckBox(this)
+            checkBox.text = "${genero.nombre}"
+            checkBox.setOnCheckedChangeListener { buttonView, isChecked ->
+                if(isChecked){
+                    lista.add(genero.id.toInt())
                 }else{
-                    Log.i("CREAR","Fallo")
+                    lista.remove(genero.id.toInt())
                 }
+                Log.i("check",lista.toString())
             }
+
+            //var p = listOf("a" to "b", "n" to listOf("a" to "b"))
+            GenerosLayout.addView(checkBox)
+        }
+        var arregloCategorias = BDD.categorias
+
+        btn_update.setOnClickListener {
+            actualizar()
+        }
 
         btn_borrar.setOnClickListener {
-            if (pelicula != null) {
-                if(helper.eliminarPelicula(pelicula.id)){
-                    Log.i("DELETE","Exito")
-                    regresarNavegacion()
-                }else{
-                    Log.i("DELETE","Fallo")
-                }
+            var url = "http://${BDD.ip}/pelicula/api/pelicula/${txt_id_pelicula.text}/delete"
+            borrarElemento(this,url,::regresarNavegacion)
 
-            }
         }
 
-        btn_load.setOnClickListener{
-            val intent = Intent()
-                    .setType("*/*")
-                    .setAction(Intent.ACTION_GET_CONTENT)
-            startActivityForResult(Intent.createChooser(intent, "Select a file"), 111)
-        }
         /*
             File f = new File(Environment.getExternalStorageDirectory()
                  + File.separator + "test.jpg");
@@ -111,22 +94,50 @@ class ModificarPeliculaActivity : AppCompatActivity() {
 
     }
 
-    fun setSpinnerPosition(categoria: String,arreglo:ArrayList<Categoria>):Int{
-        var i=0;
-        for (item in arreglo){
-            if (categoria.equals(item.nombre_categoria)){
-                return i
-            }
-            i++
-        }
-        return i
-    }
+    fun actualizar(){
+        val id = txt_id_pelicula.text.toString().toInt()
+        val nombre = txt_nombre.text.toString()
+        val descripcion = txt_desc.text.toString()
+        val costo = txt_costo.text.toString()
+        val caratula = caratula
+        val pelicula = PeliculaContent.Pelicula(id=id,nombre = nombre,descripcion =  descripcion,costo = costo,caratula =  caratula, generos = lista)
 
+
+        val parametros = listOf("id" to pelicula.id, "nombre" to pelicula.nombre, "descripcion" to pelicula.descripcion,
+                "costo" to pelicula.costo.toDouble(), "generos" to lista)
+
+        val para = """{"nombre": "${pelicula.nombre}","descripcion": "${pelicula.descripcion}",
+            |"costo": "${pelicula.costo}", "generos": ${pelicula.generos}}""".trimMargin()
+        Log.i("parametros", para)
+        actualizarPelicula(parametros = para,id = id.toString(), funcion_intent = ::regresarNavegacion)
+    }
     fun regresarNavegacion(){
         val intent = Intent(
                 this,
                 NavegationActivity::class.java
         )
         startActivity(intent)
+    }
+
+    private fun bitmapToFile(bitmap:Bitmap): Uri {
+        // Get the context wrapper
+        val wrapper = ContextWrapper(applicationContext)
+
+        // Initialize a new file instance to save bitmap object
+        var file = wrapper.getDir("Images", Context.MODE_PRIVATE)
+        file = File(file,"${UUID.randomUUID()}.jpg")
+
+        try{
+            // Compress the bitmap and save in jpg format
+            val stream:OutputStream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream)
+            stream.flush()
+            stream.close()
+        }catch (e: IOException){
+            e.printStackTrace()
+        }
+
+        // Return the saved bitmap uri
+        return Uri.parse(file.absolutePath)
     }
 }

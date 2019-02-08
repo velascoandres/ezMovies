@@ -277,6 +277,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
 
 
     fun irNavegacion(){
+        finish()
         val intent = Intent(
                 this,
                 NavegationActivity::class.java

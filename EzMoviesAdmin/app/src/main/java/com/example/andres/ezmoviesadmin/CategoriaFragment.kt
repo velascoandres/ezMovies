@@ -27,7 +27,7 @@ class CategoriaFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val helper = SqliteHelper(context)
-        helper.getCategorias(BDD.categorias)
+        //helper.getCategorias(BDD.categorias)
         arguments?.let {
             columnCount = it.getInt(ARG_COLUMN_COUNT)
         }

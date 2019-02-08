@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.fragment_categoria.view.*
  * TODO: Replace the implementation with code for your data type.
  */
 class MyCategoriaRecyclerViewAdapter(
-        private val mValues: List<Categoria>,
+        private val mValues: List<CategoriaAPI>,
         private val mListener: OnListFragmentInteractionListener?,private val context: Context)
     : RecyclerView.Adapter<MyCategoriaRecyclerViewAdapter.ViewHolder>() {
 
@@ -44,12 +44,16 @@ class MyCategoriaRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
-        holder.mIdView.text = item.id
-        holder.mContentView.text = item.nombre_categoria
+        holder.mContentView.text = item.nombre
         holder.mBotonMod.setOnClickListener {
-            val categoria = Categoria(item.id,item.nombre_categoria)
+            val categoria = Categoria(item.id.toString(),item.nombre)
             irActividadModificar(categoria)
         }
+
+        holder.mBotonCre.setOnClickListener {
+            irActividaCrear()
+        }
+
 
         with(holder.mView) {
             tag = item
@@ -67,12 +71,20 @@ class MyCategoriaRecyclerViewAdapter(
         ContextCompat.startActivity(context, intentActividadIntent, null)
     }
 
+    fun irActividaCrear(){
+        val intentActividadIntent = Intent(
+                context,
+                ModificarCategoriaActivity::class.java
+        )
+        ContextCompat.startActivity(context, intentActividadIntent, null)
+    }
+
     override fun getItemCount(): Int = mValues.size
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
-        val mIdView: TextView = mView.id_comentario
         val mContentView: TextView = mView.contenido
         val mBotonMod:Button = mView.btn_mod_categoria
+        val mBotonCre:Button = mView.btn_crear_genero
 
         override fun toString(): String {
             return super.toString() + " '" + mContentView.text + "'"

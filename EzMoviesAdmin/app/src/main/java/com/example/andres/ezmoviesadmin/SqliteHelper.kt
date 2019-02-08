@@ -107,23 +107,7 @@ class SqliteHelper(context: Context?) :
 
     }
 
-    fun getActores(actores:ArrayList<Actor>){
-        val statement = "select id_actor, nombre from actor;"
-        val dbReadable = readableDatabase
-        val resultado = dbReadable.rawQuery(statement, null)
-        actores.clear()
-
-        if (resultado.moveToFirst()) {
-            do {
-                actores.add(Actor(resultado.getString(0),resultado.getString(1)))
-            } while (resultado.moveToNext())
-        }
-
-        resultado.close()
-
-        dbReadable.close()
-    }
-
+    /*
     fun getPeliculas(peliculas: ArrayList<PeliculaContent.Pelicula>){
         val statement = "select id_pelicula, pelicula.nombre, pelicula.id_categoria, categoria.nombre from pelicula,categoria where pelicula.id_categoria=categoria.id_categoria;"
 
@@ -145,7 +129,7 @@ class SqliteHelper(context: Context?) :
         dbReadable.close()
 
 
-    }
+    }*/
 
     fun crearPeliculaFormulario(nombre: String,
                                 id_categoria: String): Boolean {
