@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.fragment_actor.view.*
  * TODO: Replace the implementation with code for your data type.
  */
 class MyActorRecyclerViewAdapter(
-        private val mValues: List<Actor>,
+        private val mValues: List<ActorAPI>,
         private val mListener: OnListFragmentInteractionListener?,private val context: Context)
     : RecyclerView.Adapter<MyActorRecyclerViewAdapter.ViewHolder>() {
 
@@ -44,11 +44,15 @@ class MyActorRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
-        holder.mIdView.text = item.id_actor
-        holder.mContentView.text = item.nombre_actor
+        holder.mContentView.text = item.nombre
         holder.mBtnView.setOnClickListener{
             Log.i("Actor","Click OK")
-            irActividadModificar(Actor(holder.mIdView.text.toString(),holder.mContentView.text.toString()))
+            irActividadModificar(Actor(item.id.toString(),item.nombre,null))
+        }
+
+        holder.mBtnCrear.setOnClickListener {
+            Log.i("Actor","Click OK")
+            irActividadCrear()
         }
 
         with(holder.mView) {
@@ -66,12 +70,20 @@ class MyActorRecyclerViewAdapter(
         ContextCompat.startActivity(context, intentActividadIntent, null)
     }
 
+    fun irActividadCrear(){
+        val intentActividadIntent = Intent(
+                context,
+                ModificarActorActivity::class.java
+        )
+        ContextCompat.startActivity(context, intentActividadIntent, null)
+    }
+
     override fun getItemCount(): Int = mValues.size
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
-        val mIdView: TextView = mView.id_actor
         val mContentView: TextView = mView.nombre_actor
         val mBtnView:Button = mView.btn_mod_actor
+        val mBtnCrear:Button = mView.btn_crear_actor
 
         override fun toString(): String {
             return super.toString() + " '" + mContentView.text + "'"

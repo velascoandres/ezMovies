@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import com.example.andres.ezmoviesadmin.BDD.Companion.categorias
 
 
 import com.example.andres.ezmoviesadmin.PeliculaFragment.OnListFragmentInteractionListener
@@ -50,8 +51,14 @@ class MyPeliculaRecyclerViewAdapter(
         val item = mValues[position]
         //holder.mIdView.text = item.id
         holder.mContentView.text = item.nombre
-        holder.mCategoryView.text = item.generos.toString()
         holder.mDescripcion.text = item.descripcion
+        var generos =""
+        var categorias_pelicula = categorias.filter { categoria -> categoria.id in item.generos  }
+        for ( categoria in categorias_pelicula){
+            generos = generos + categoria.nombre + " "
+        }
+        holder.mCategoryView.text = generos
+
         holder.mBotonView.setOnClickListener {
             val pelicula_s = Pelicula_S(
                     id=item.id,
@@ -65,7 +72,7 @@ class MyPeliculaRecyclerViewAdapter(
         }
         Picasso.get()
                 .load(item.caratula)
-                .resize(256,256)
+                .resize(512,512)
                 .centerCrop()
                 .into(holder.mCaratula)
 

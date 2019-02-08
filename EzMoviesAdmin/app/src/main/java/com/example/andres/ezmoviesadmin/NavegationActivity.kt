@@ -14,7 +14,9 @@ import kotlin.concurrent.schedule
 import android.graphics.BitmapFactory
 import android.graphics.Bitmap
 import android.view.View
+import com.example.andres.ezmoviesadmin.BDD.Companion.actores
 import com.example.andres.ezmoviesadmin.BDD.Companion.ip
+import com.example.andres.ezmoviesadmin.BDD.Companion.peliculas
 import com.example.andres.ezmoviesadmin.dummy.PeliculaContent
 import kotlinx.android.synthetic.main.fragment_pelicula.*
 import java.net.URL
@@ -31,13 +33,15 @@ class NavegationActivity : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_dashboard -> {
+                destruirFragmentoActual()
                 loadingPanel.visibility = View.VISIBLE
-                crearFragmentoDos()
+                getCategoriasF(BDD.categorias)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_notifications -> {
+                destruirFragmentoActual()
                 loadingPanel.visibility = View.VISIBLE
-                crearFragmentoTres()
+                getActores(BDD.actores)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.comments_notifications ->{
@@ -200,6 +204,55 @@ class NavegationActivity : AppCompatActivity() {
                     }
 
                     crearFragmentoUno()
+                    loadingPanel.visibility = View.INVISIBLE
+                }
+            }
+        }
+    }
+    fun getCategoriasF(categorias: ArrayList<CategoriaAPI>){
+        val url = "http://${ip}/pelicula/api/generos"
+        url.httpGet().responseString{request, response, result ->
+            when (result) {
+                is Result.Failure -> {
+                    val ex = result.getException()
+                }
+                is Result.Success -> {
+                    val data = result.get()
+                    categorias.clear()
+                    val wordDict = Klaxon().parseArray<CategoriaAPI>(data)
+                    Log.i("http", "Datos: ${wordDict.toString()}")
+                    if (wordDict != null) {
+                        for ( categoria in wordDict.iterator()){
+                            categorias.add(categoria)
+                        }
+                    }
+
+                    crearFragmentoDos()
+                    loadingPanel.visibility = View.INVISIBLE
+                }
+            }
+        }
+    }
+
+    fun getActores(actores: ArrayList<ActorAPI>){
+        val url = "http://${ip}/pelicula/api/actor"
+        url.httpGet().responseString{request, response, result ->
+            when (result) {
+                is Result.Failure -> {
+                    val ex = result.getException()
+                }
+                is Result.Success -> {
+                    val data = result.get()
+                    actores.clear()
+                    val wordDict = Klaxon().parseArray<ActorAPI>(data)
+                    Log.i("http", "Datos: ${wordDict.toString()}")
+                    if (wordDict != null) {
+                        for ( categoria in wordDict.iterator()){
+                            actores.add(categoria)
+                        }
+                    }
+
+                    crearFragmentoTres()
                     loadingPanel.visibility = View.INVISIBLE
                 }
             }

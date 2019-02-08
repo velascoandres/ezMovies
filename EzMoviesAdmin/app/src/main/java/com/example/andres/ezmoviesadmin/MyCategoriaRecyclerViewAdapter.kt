@@ -44,12 +44,16 @@ class MyCategoriaRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
-        holder.mIdView.text = item.id.toString()
         holder.mContentView.text = item.nombre
         holder.mBotonMod.setOnClickListener {
             val categoria = Categoria(item.id.toString(),item.nombre)
             irActividadModificar(categoria)
         }
+
+        holder.mBotonCre.setOnClickListener {
+            irActividaCrear()
+        }
+
 
         with(holder.mView) {
             tag = item
@@ -67,12 +71,20 @@ class MyCategoriaRecyclerViewAdapter(
         ContextCompat.startActivity(context, intentActividadIntent, null)
     }
 
+    fun irActividaCrear(){
+        val intentActividadIntent = Intent(
+                context,
+                ModificarCategoriaActivity::class.java
+        )
+        ContextCompat.startActivity(context, intentActividadIntent, null)
+    }
+
     override fun getItemCount(): Int = mValues.size
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
-        val mIdView: TextView = mView.id_comentario
         val mContentView: TextView = mView.contenido
         val mBotonMod:Button = mView.btn_mod_categoria
+        val mBotonCre:Button = mView.btn_crear_genero
 
         override fun toString(): String {
             return super.toString() + " '" + mContentView.text + "'"

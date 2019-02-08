@@ -16,8 +16,16 @@ class PeliculaSerializada(serializers.ModelSerializer):
         fields = ('id', 'nombre', 'descripcion', 'caratula', 'costo', 'generos')
 
 
+class PeliculaSerializada_put(serializers.ModelSerializer):
+    generos = serializers.PrimaryKeyRelatedField(queryset=Genero.objects.all(), many=True, required=False)
+
+    class Meta:
+        model = Pelicula
+        fields = ('id', 'nombre', 'descripcion', 'costo', 'generos')
+
+
 class ActorSerializado(serializers.ModelSerializer):
-    peliculas = PeliculaSerializada(many=True, read_only=True)
+    peliculas = serializers.PrimaryKeyRelatedField(queryset=Pelicula.objects.all(), many=True, required=False)
 
     class Meta:
         model = Actor

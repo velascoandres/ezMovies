@@ -24,7 +24,7 @@ class ActorGetPost(generics.ListCreateAPIView):
 class PeliculaUpdate(generics.UpdateAPIView):
     queryset = Pelicula.objects.all()
     lookup_field = 'id'
-    serializer_class = PeliculaSerializada
+    serializer_class = PeliculaSerializada_put
 
 #  Actualizar
 class GeneroUpdate(generics.UpdateAPIView):
@@ -39,6 +39,7 @@ class ActorUpdate(generics.UpdateAPIView):
     lookup_field = 'id'
     serializer_class = ActorSerializado
 
+
 # Borrar
 class PeliculaDelete(generics.DestroyAPIView):
     queryset = Pelicula.objects.all()
@@ -46,6 +47,7 @@ class PeliculaDelete(generics.DestroyAPIView):
     serializer_class = PeliculaSerializada
     http_method_names = ["delete"]
     allowed_methods = ('DELETE',)
+
 
 # Borrar
 class GeneroDelete(generics.DestroyAPIView):

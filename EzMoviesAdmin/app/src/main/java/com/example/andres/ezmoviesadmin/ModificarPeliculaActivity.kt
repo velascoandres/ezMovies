@@ -15,12 +15,22 @@ import com.example.andres.ezmoviesadmin.dummy.PeliculaContent
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_modificar_pelicula.*
 import java.lang.reflect.Array
+import com.example.andres.ezmoviesadmin.R.id.imageView
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.Bitmap
+import android.content.ContentValues
+import android.content.Context
+import android.content.ContextWrapper
+import android.net.Uri
+import android.provider.MediaStore
+import java.io.*
+import java.util.*
+
 
 class ModificarPeliculaActivity : AppCompatActivity() {
     var id = 0
     var lista = ArrayList<Int>()
     var caratula = ""
-    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_modificar_pelicula)
@@ -32,12 +42,12 @@ class ModificarPeliculaActivity : AppCompatActivity() {
         txt_nombre.setText(pelicula?.nombre)
         txt_desc.setText(pelicula?.descripcion)
         txt_costo.setText(pelicula?.costo)
-        txt_id_pelicula.setText(pelicula?.id.toString())
-        var caratula = pelicula?.caratula
+        txt_id_pelicula.text = pelicula?.id.toString()
+        caratula = pelicula?.caratula!!
 
         Picasso.get()
-                .load(pelicula?.caratula)
-                .resize(256,256)
+                .load(pelicula.caratula)
+                .resize(256,512)
                 .centerCrop()
                 .into(caratula_img)
 
@@ -64,14 +74,11 @@ class ModificarPeliculaActivity : AppCompatActivity() {
         }
 
         btn_borrar.setOnClickListener {
+            var url = "http://${BDD.ip}/pelicula/api/pelicula/${txt_id_pelicula.text}/delete"
+            borrarElemento(this,url,::regresarNavegacion)
+
         }
 
-        btn_load.setOnClickListener{
-            val intent = Intent()
-                    .setType("*/*")
-                    .setAction(Intent.ACTION_GET_CONTENT)
-            startActivityForResult(Intent.createChooser(intent, "Select a file"), 111)
-        }
         /*
             File f = new File(Environment.getExternalStorageDirectory()
                  + File.separator + "test.jpg");
@@ -88,23 +95,49 @@ class ModificarPeliculaActivity : AppCompatActivity() {
     }
 
     fun actualizar(){
-        val id = id
+        val id = txt_id_pelicula.text.toString().toInt()
         val nombre = txt_nombre.text.toString()
         val descripcion = txt_desc.text.toString()
         val costo = txt_costo.text.toString()
         val caratula = caratula
         val pelicula = PeliculaContent.Pelicula(id=id,nombre = nombre,descripcion =  descripcion,costo = costo,caratula =  caratula, generos = lista)
 
-        val parametros = listOf("id" to pelicula.id , "nombre" to pelicula.nombre, "descripcion" to pelicula.descripcion,
-                "costo" to pelicula.costo, "caratula" to pelicula.caratula)
-        actualizarPelicula(parametros = parametros,id = id.toString(), funcion_intent = ::regresarNavegacion)
-    }
 
+        val parametros = listOf("id" to pelicula.id, "nombre" to pelicula.nombre, "descripcion" to pelicula.descripcion,
+                "costo" to pelicula.costo.toDouble(), "generos" to lista)
+
+        val para = """{"nombre": "${pelicula.nombre}","descripcion": "${pelicula.descripcion}",
+            |"costo": "${pelicula.costo}", "generos": ${pelicula.generos}}""".trimMargin()
+        Log.i("parametros", para)
+        actualizarPelicula(parametros = para,id = id.toString(), funcion_intent = ::regresarNavegacion)
+    }
     fun regresarNavegacion(){
         val intent = Intent(
                 this,
                 NavegationActivity::class.java
         )
         startActivity(intent)
+    }
+
+    private fun bitmapToFile(bitmap:Bitmap): Uri {
+        // Get the context wrapper
+        val wrapper = ContextWrapper(applicationContext)
+
+        // Initialize a new file instance to save bitmap object
+        var file = wrapper.getDir("Images", Context.MODE_PRIVATE)
+        file = File(file,"${UUID.randomUUID()}.jpg")
+
+        try{
+            // Compress the bitmap and save in jpg format
+            val stream:OutputStream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream)
+            stream.flush()
+            stream.close()
+        }catch (e: IOException){
+            e.printStackTrace()
+        }
+
+        // Return the saved bitmap uri
+        return Uri.parse(file.absolutePath)
     }
 }
